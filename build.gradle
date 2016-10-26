@@ -1,0 +1,46 @@
+group 'com.optimus'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
+    compile "com.docusign:docusign-esign-java:2.0.0"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
+    compile "com.mashape.unirest:unirest-java:1.4.9"
+}
+
+buildscript {
+    ext.kotlin_version = '1.0.4'
+    ext.spring_boot_version = '1.4.1.RELEASE'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+    }
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    main.java.srcDirs += 'src/main/java'
+}
+
+springBoot {
+    mainClass = 'com.optimus.docusign.ApplicationKt'
+}

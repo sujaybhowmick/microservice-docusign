@@ -1,0 +1,8 @@
+server:
+  port: 8081
+  context-path: /api/microdocusign
+
+docusign:
+  baseUrl: https://demo.docusign.net/restapi/v2
+  tokenEndPoint: /oauth2/token
+
