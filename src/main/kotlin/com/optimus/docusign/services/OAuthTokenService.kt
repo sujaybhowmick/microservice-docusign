@@ -2,6 +2,7 @@ package com.optimus.docusign.services
 
 import com.mashape.unirest.http.Unirest
 import com.mashape.unirest.http.exceptions.UnirestException
+import com.optimus.docusign.exceptions.ResourceNotFoundException
 import com.optimus.docusign.exceptions.ServiceException
 import com.optimus.docusign.models.Auth
 import com.optimus.docusign.models.UserToken
@@ -42,15 +43,18 @@ class OAuthTokenService {
         val result = try {
             val response = Unirest.post(tokenUrl).headers(headers).body(sb.toString()).asJson()
             val jsonObject = response.body.`object`
-            if (response.status == 200) {
-                val token = UserToken(jsonObject.getString("access_token"),
+            val token = when(response.status) {
+                200 -> UserToken(jsonObject.getString("access_token"),
                         jsonObject.getString("token_type"),
                         jsonObject.getString("scope"))
-                token
-            } else {
-                val errorMessage = jsonObject.getString("error") + "&" + jsonObject.getString("error_description")
-                throw ServiceException(errorMessage)
+                404 -> throw ResourceNotFoundException("Resource Not found")
+                500 -> throw ServiceException(response.statusText)
+
+                else -> {
+                    throw ServiceException("Unknown Error")
+                }
             }
+            token
 
         } catch(e: UnirestException) {
             throw ServiceException(e)

@@ -78,3 +78,5 @@ microservice-docusign.iml
 gradlew
 gradlew.bat
 gradle
+build.gradle
+settings.gradle
